@@ -14,7 +14,6 @@ const Feed = () => {
             querySnapshot.forEach(doc => {
                 tempPosts.push({ id: doc.id, ...doc.data() });
             });
-            console.log(tempPosts)
             setPosts([...tempPosts]);
         })
     }, [tempVar]);
