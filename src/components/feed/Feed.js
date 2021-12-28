@@ -7,22 +7,26 @@ import { collection, getDocs } from '@firebase/firestore';
 
 const Feed = () => {
     const [posts, setPosts] = useState([]);
-    const [tempVar, setTempVar] = useState(false);
-    useEffect(() => {
+    const getTweets = () => {
         getDocs(collection(db, "posts")).then(querySnapshot => {
             let tempPosts = [];
+            let finalPosts = [];
             querySnapshot.forEach(doc => {
                 tempPosts.push({ id: doc.id, ...doc.data() });
+                finalPosts = tempPosts.sort((a, b) => b.time - a.time);
             });
-            setPosts([...tempPosts]);
+            setPosts([...finalPosts]);
         })
-    }, [tempVar]);
+    };
+    useEffect(() => {
+        getTweets();
+    }, []);
     return (
         <div className="feed">
             <div className="feed__header">
                 <h2>Home</h2>
             </div>
-            <TweetBox setTempVar={setTempVar} />
+            <TweetBox getTweets={getTweets} />
             {posts && posts.map((post) => (
                 <Post
                     key={post.id}

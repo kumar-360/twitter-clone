@@ -4,23 +4,24 @@ import './TweetBox.css';
 import { Avatar, Button } from "@material-ui/core";
 import { collection, addDoc } from "firebase/firestore";
 
-const TweetBox = ({ setTempVar }) => {
+const TweetBox = ({ getTweets }) => {
     const [tweetMessage, setTweetMessage] = useState('');
     const [tweetImage, setTweetImage] = useState('');
 
     const sendTweet = async (e) => {
         e.preventDefault();
         if (tweetMessage) {
-            setTempVar(true);
             await addDoc(collection(db, "posts"), {
                 displayName: "Kumar Shanu",
                 username: "kumarshanu360",
                 verified: true,
                 text: tweetMessage,
                 image: tweetImage,
+                time: new Date().getTime(),
                 avatar:
                     "https://media.istockphoto.com/vectors/boy-mascot-avatar-or-gamer-boy-logo-vector-vector-id1278776622?k=20&m=1278776622&s=170667a&w=0&h=P0hp26Mon4HJ7Yr0ortXEdp63Dq-ifyQw4STZKkMRkA=",
             });
+            getTweets();
             setTweetMessage('');
             setTweetImage('');
         }
